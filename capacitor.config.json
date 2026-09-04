@@ -1,0 +1,9 @@
+{
+  "appId": "com.vyro.vx7",
+  "appName": "VYRO VX7",
+  "webDir": "build",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}

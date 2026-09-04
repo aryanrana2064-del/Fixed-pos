@@ -1,0 +1,135 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: "Manrope", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+    .inp {
+        @apply w-full border border-input rounded-lg px-3 py-2.5 text-sm bg-background text-foreground outline-none transition-colors focus:border-[#16a34a] focus:ring-2 focus:ring-[#16a34a]/20;
+    }
+    .card {
+        @apply bg-card text-card-foreground rounded-xl border border-border shadow-[0_1px_2px_rgba(16,24,39,0.04)];
+    }
+    .th {
+        @apply bg-muted/60 text-[11px] uppercase tracking-wide text-muted-foreground;
+    }
+    .btn-ghost {
+        @apply inline-flex items-center gap-2 border border-input rounded-lg px-3.5 py-2.5 text-sm bg-background text-foreground hover:bg-muted active:scale-[0.98] transition-all;
+    }
+    .btn-dark {
+        @apply inline-flex items-center gap-2 bg-[#1e3a8a] text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-[#1e40af] active:scale-[0.98] transition-all;
+    }
+    .btn-gold {
+        @apply inline-flex items-center gap-2 bg-[#16a34a] text-white rounded-lg px-4 py-2.5 text-sm font-semibold hover:bg-[#15803d] active:scale-[0.98] transition-all;
+    }
+    .icon-btn {
+        @apply inline-flex items-center justify-center w-8 h-8 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground transition-colors;
+    }
+    .modal-bg {
+        @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-start sm:items-center justify-center p-3 overflow-auto;
+    }
+    .modal {
+        @apply bg-card text-card-foreground rounded-2xl w-full p-5 sm:p-6 my-6 shadow-2xl;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.tabular-nums {
+    font-variant-numeric: tabular-nums;
+}
+
+::selection {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+*::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+*::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9px;
+}
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+@media print {
+    aside,
+    header {
+        display: none !important;
+    }
+}
+
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 217 33% 17%;
+        --card: 0 0% 100%;
+        --card-foreground: 217 33% 17%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 217 33% 17%;
+        --primary: 221 83% 33%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 142 40% 96%;
+        --secondary-foreground: 217 33% 17%;
+        --muted: 210 20% 96%;
+        --muted-foreground: 215 16% 47%;
+        --accent: 142 71% 45%;
+        --accent-foreground: 0 0% 100%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 214 20% 89%;
+        --input: 214 20% 89%;
+        --ring: 142 71% 45%;
+        --radius: 0.5rem;
+    }
+
+    .dark {
+        --background: 217 33% 9%;
+        --foreground: 210 20% 92%;
+        --card: 217 28% 13%;
+        --card-foreground: 210 20% 92%;
+        --popover: 217 28% 13%;
+        --popover-foreground: 210 20% 92%;
+        --primary: 217 60% 55%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 217 28% 18%;
+        --secondary-foreground: 210 20% 92%;
+        --muted: 217 25% 18%;
+        --muted-foreground: 215 15% 65%;
+        --accent: 142 60% 40%;
+        --accent-foreground: 0 0% 100%;
+        --destructive: 0 70% 45%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 217 20% 22%;
+        --input: 217 20% 22%;
+        --ring: 142 60% 40%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}

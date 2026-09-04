@@ -1,0 +1,15 @@
+{
+  "name": "VYRO VX7 — Smart Business POS",
+  "short_name": "VYRO VX7",
+  "description": "Universal POS & business management for retail: billing, stock, khata and reports.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#101827",
+  "theme_color": "#101827",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

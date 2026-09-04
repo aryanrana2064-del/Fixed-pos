@@ -1,0 +1,67 @@
+rules_version = '2';
+
+// NOTE: Cloud Functions use the Admin SDK, which ALWAYS bypasses these rules.
+// These rules only govern direct reads/writes made by the web app / APK using
+// the client Firebase SDK. Every user gets a custom claim "shopId" and "role"
+// set by the bootstrapAccount Cloud Function right after they sign in/sign up.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+    function myShop() {
+      return request.auth.token.shopId;
+    }
+    function isMyShopDoc() {
+      return signedIn() && resource.data.shopId == myShop();
+    }
+    function isSuperAdmin() {
+      return signedIn() && request.auth.token.platformRole == "superadmin";
+    }
+
+    // Shop profile + settings: read-only from client, all writes via Functions.
+    match /shops/{shopId} {
+      allow read: if signedIn() && (shopId == myShop() || isSuperAdmin());
+      allow write: if false;
+    }
+    match /settings/{docId} {
+      allow read: if isMyShopDoc() || isSuperAdmin();
+      allow write: if false;
+    }
+
+    // Products, customers/suppliers: client can read + create/edit basic fields
+    // directly (no money/stock logic involved in a plain edit), but stock
+    // changes ALWAYS go through the stockAdjust / createSale Cloud Functions,
+    // never a direct client write to "stock".
+    match /products/{productId} {
+      allow read: if isMyShopDoc() || isSuperAdmin();
+      allow create: if signedIn() && request.resource.data.shopId == myShop();
+      allow update: if isMyShopDoc()
+                    && request.resource.data.stock == resource.data.stock; // stock frozen for direct writes
+      allow delete: if isMyShopDoc();
+    }
+    match /parties/{partyId} {
+      allow read: if isMyShopDoc() || isSuperAdmin();
+      allow write: if signedIn() &&
+                   (resource == null ? request.resource.data.shopId == myShop() : isMyShopDoc());
+    }
+
+    // Money-moving / audit-critical collections: NEVER writable directly from
+    // the client. Only Cloud Functions (Admin SDK) may write these.
+    match /sales/{id}            { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /purchases/{id}        { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /returns/{id}          { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /payments/{id}         { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /movements/{id}        { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /adjustments/{id}      { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /activity/{id}         { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /counters/{id}         { allow read: if false; allow write: if false; }
+    match /licenses/{id}         { allow read: if isMyShopDoc() || isSuperAdmin(); allow write: if false; }
+    match /users/{id} {
+      allow read: if signedIn() && (resource.data.shopId == myShop() || isSuperAdmin());
+      allow write: if false; // user create/role change/disable only via Functions
+    }
+  }
+}
